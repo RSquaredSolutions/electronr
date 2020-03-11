@@ -1,0 +1,123 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [macos-latest, windows-latest]
+
+    runs-on: ${{matrix.os}}
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup NodeJS 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+
+      - name: Install NodeJS components
+        run: |
+          npm install
+
+      - name: Emit pkgver
+        id: pkg
+        run: |
+          pkgver=$(node ./build/get-pkg-version.js)
+          echo ::set-output name=version::$pkgver
+        shell: bash
+      
+      - name: Build Windows NSIS installer
+        if: matrix.os == 'windows-latest'
+        run: npm run dist-win
+      - name: Cache Windows release
+        if: matrix.os == 'windows-latest'
+        uses: actions/upload-artifact@v1
+        with:
+          name: electronr-${{steps.pkg.outputs.version}}.exe
+          path: ./release/electronr-${{steps.pkg.outputs.version}}.exe
+
+      - name: Build macOS DMG file
+        if: matrix.os == 'macos-latest'
+        run: APPLE_ID=${{secrets.APPLE_ID}} APPLE_ID_PASS=${{secrets.APPLE_ID_PASS}} CSC_LINK=${{secrets.MACOS_CERT}} CSC_KEY_PASSWORD=${{secrets.MACOS_CERT_PASS}} npm run dist-mac
+      - name: Cache macOS release
+        if: matrix.os == 'macos-latest'
+        uses: actions/upload-artifact@v1
+        with: 
+          name: electronr-${{steps.pkg.outputs.version}}.dmg
+          path: ./release/electronr-${{steps.pkg.outputs.version}}.dmg
+
+  prepare_release:
+    needs: [build]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Steup NodeJS 12.x
+        uses: actions/setup-node@v1
+        with:
+          node-version: '12.x'
+      - name: Retrieve current package version
+        id: pkg
+        run: |
+          pkgver=$(node ./build/get-pkg-version.js)
+          echo ::set-output name=version::$pkgver
+      - name: Download Windows asset
+        uses: actions/download-artifact@v1
+        with:
+          name: electronr-${{steps.pkg.outputs.version}}.exe
+          path: .
+      - name: Download macOS asset
+        uses: actions/download-artifact@v1
+        with: 
+          name: electronr-${{steps.pkg.outputs.version}}.dmg
+          path: .
+      - name: Generate SHA256 checksums
+        run: |
+          sha256sum "electronr-${{steps.pkg.outputs.version}}.exe" > "SHA256SUMS.txt"
+          sha256sum "electronr-${{steps.pkg.outputs.version}}.dmg" > "SHA256SUMS.txt"
+      - name: Verify checksums
+        run: sha256sum -c SHA256SUMS.txt
+      - name: Create new release draft
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+          tag_name: v${{steps.pkg.outputs.version}}
+          release_name: Release v${{steps.pkg.outputs.version}}
+          body: Looks like we forgot to fill in the changelog....
+          draft: true
+
+      - name: Upload Windows asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with: 
+          upload_url: ${{steps.create_release.outputs.upload_url}}
+          asset_path: ./electronr-${{steps.pkg.outputs.version}}.exe
+          asset_name: electronr-${{steps.pkg.outputs.version}}.exe
+          asset_content_type: application/x-msdownload
+
+      - name: Upload macOS asset
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+          upload_url: ${{steps.create_release.outputs.upload_url}}
+          asset_path: ./electronr-${{steps.pkg.outputs.version}}.dmg
+          asset_name: electronr-${{steps.pkg.outputs.version}}.dmg
+          asset_content_type: application/octet-stream
+
+      - name: Upload checksums
+        uses: actions/upload-release-asset@v1.0.1
+        env:
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
+        with:
+          upload_url: ${{steps.create_release.outputs.upload_url}}
+          asset_path: ./SHA256SUMS.txt
+          asset_name: SHA256SUMS.txt
+          asset_content_type: text/plain
