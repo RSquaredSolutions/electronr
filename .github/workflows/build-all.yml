@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: electronr-${{steps.pkg.outputs.version}}.exe
-          path: ./release/electronr-${{steps.pkg.outputs.version}}.exe
+          path: ./dist/electronr-${{steps.pkg.outputs.version}}.exe
 
       - name: Build macOS DMG file
         if: matrix.os == 'macos-latest'
@@ -49,7 +49,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with: 
           name: electronr-${{steps.pkg.outputs.version}}.dmg
-          path: ./release/electronr-${{steps.pkg.outputs.version}}.dmg
+          path: ./dist/electronr-${{steps.pkg.outputs.version}}.dmg
 
   prepare_release:
     needs: [build]

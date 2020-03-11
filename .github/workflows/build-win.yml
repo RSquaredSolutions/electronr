@@ -39,7 +39,7 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: electronr-${{steps.pkg.outputs.version}}.exe
-          path: ./release/electronr-${{steps.pkg.outputs.version}}.exe
+          path: ./dist/electronr-${{steps.pkg.outputs.version}}.exe
 
   prepare_release:
     needs: [build]

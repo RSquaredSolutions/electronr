@@ -22,6 +22,7 @@
 		"electron-context-menu": "^0.15.0",
 		"electron-debug": "^3.0.0",
 		"electron-dl": "^2.0.0",
+		"electron-notarize": "^0.2.1",
 		"electron-pdf-window": "^1.0.12",
 		"electron-store": "^4.0.0",
 		"electron-unhandled": "^3.0.0",
@@ -39,56 +40,5 @@
 	"devDependencies": {
 		"electron": "^6.0.7",
 		"electron-builder": "^21.2.0"
-	},
-	"build": {
-		"appId": "xyz.rsquaredsolutions.electronr",
-		"productName": "ElectronR",
-		"directories": {
-			"buildResources": "build",
-			"output": "dist"
-		},
-		"publish": [
-			{
-				"provider": "github",
-				"owner": "rsquaredron",
-				"repo": "electronr"
-			}
-		],
-		"win": {
-			"icon": "build/icon.png",
-			"verifyUpdateCodeSignature": false,
-			"extraResources": [
-				{
-					"from": "./build/scripts",
-					"to": "scripts"
-				}
-			]
-		},
-		"mac": {
-			"category": "public.app-category.education",
-			"darkModeSupport": false,
-			"icon": "build/icon.png",
-			"extraResources": [
-				{
-					"from": "./build/scripts",
-					"to": "scripts"
-				}
-			]
-		},
-		"dmg": {
-			"iconSize": 160,
-			"contents": [
-				{
-					"x": 180,
-					"y": 170
-				},
-				{
-					"x": 480,
-					"y": 170,
-					"type": "link",
-					"path": "/Applications"
-				}
-			]
-		}
 	}
 }
