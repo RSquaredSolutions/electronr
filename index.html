@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+	<head profile="http://www.w3.org/2005/10/profile">
+		<meta charset="utf-8">
+		<title>ElectronR</title>
+		<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+		<link rel="stylesheet" href="assets/css/index.css">
+		<!-- <link rel="stylesheet" href="assets/css/bootstrap-toc.min.css" /> -->
+	</head>
+	<body>
+		
+		<div class="container-fluid">
+
+			<div id="generic-alert" class="alert" role="alert"></div>
+
+			<div id="welcome-screen" class="screen" style="display:none;">
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<h1>ElectronR</h1>
+						<h4>Version: <span id="current-version"></span></h4>
+						<img src="assets/img/psu.jpg" class="img-responsive center-block" />
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12 text-center">
+						<button id="analysis-button" class="btn btn-large btn-primary">Run Analysis</button>
+					</div>
+				</div>
+			</div>
+
+			<div id="results-screen" class="screen" style="display:none;">
+				<div class="row">
+					<div class="col-xs-12">
+						<h1>Text Results</h1>
+						<pre id="results-text"></pre>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-xs-12">
+						<h1>Image Results</h1>
+						<div id="results-image"></div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+
+		<script src="assets/js/app.js"></script>
+	</body>
+</html>

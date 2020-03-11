@@ -1,0 +1,82 @@
+{
+	"name": "electronr",
+	"productName": "ElectronJS and R",
+	"version": "0.0.1",
+	"description": "ElectronJS and R",
+	"license": "",
+	"repository": "rsquaredron/electronr",
+	"author": {
+		"name": "Ron Richardson",
+		"email": "ron@rsquaredsolutions.xyz"
+	},
+	"scripts": {
+		"postinstall": "electron-builder install-app-deps",
+		"start": "electron .",
+		"pack": "electron-builder --dir",
+		"dist": "electron-builder --macos --windows -p always",
+		"dist-win": "electron-builder --windows",
+		"dist-mac": "electron-builder --macos"
+	},
+	"dependencies": {
+		"bootstrap": "^3.3.7",
+		"electron-context-menu": "^0.15.0",
+		"electron-debug": "^3.0.0",
+		"electron-dl": "^2.0.0",
+		"electron-pdf-window": "^1.0.12",
+		"electron-store": "^4.0.0",
+		"electron-unhandled": "^3.0.0",
+		"electron-updater": "^4.0.6",
+		"electron-util": "^0.12.0",
+		"electron-window-state": "^5.0.3",
+		"find": "^0.3.0",
+		"fs": "0.0.1-security",
+		"jquery": "^3.3.1",
+		"os": "^0.1.1",
+		"popper.js": "^1.16.0",
+		"sudo-prompt": "^9.0.0",
+		"tether": "^1.4.7"
+	},
+	"devDependencies": {
+		"electron": "^6.0.7",
+		"electron-builder": "^21.2.0"
+	},
+	"build": {
+		"appId": "xyz.rsquaredsolutions.electronr",
+		"productName": "ElectronR",
+		"directories": {
+			"buildResources": "build",
+			"output": "dist"
+		},
+		"publish": [
+			{
+				"provider": "github",
+				"owner": "rsquaredron",
+				"repo": "electronr"
+			}
+		],
+		"win": {
+			"icon": "build/icon.png",
+			"verifyUpdateCodeSignature": false
+		},
+		"mac": {
+			"category": "public.app-category.education",
+			"darkModeSupport": false,
+			"icon": "build/icon.png"
+		},
+		"dmg": {
+			"iconSize": 160,
+			"contents": [
+				{
+					"x": 180,
+					"y": 170
+				},
+				{
+					"x": 480,
+					"y": 170,
+					"type": "link",
+					"path": "/Applications"
+				}
+			]
+		}
+	}
+}
