@@ -60,7 +60,7 @@
 			"extraResources": [
 				{
 					"from": "./build/scripts",
-					"to:": "scripts"
+					"to": "scripts"
 				}
 			]
 		},
@@ -71,7 +71,7 @@
 			"extraResources": [
 				{
 					"from": "./build/scripts",
-					"to:": "scripts"
+					"to": "scripts"
 				}
 			]
 		},
