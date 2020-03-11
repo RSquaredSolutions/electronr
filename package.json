@@ -56,12 +56,24 @@
 		],
 		"win": {
 			"icon": "build/icon.png",
-			"verifyUpdateCodeSignature": false
+			"verifyUpdateCodeSignature": false,
+			"extraResources": [
+				{
+					"from": "./build/scripts",
+					"to:": "scripts"
+				}
+			]
 		},
 		"mac": {
 			"category": "public.app-category.education",
 			"darkModeSupport": false,
-			"icon": "build/icon.png"
+			"icon": "build/icon.png",
+			"extraResources": [
+				{
+					"from": "./build/scripts",
+					"to:": "scripts"
+				}
+			]
 		},
 		"dmg": {
 			"iconSize": 160,

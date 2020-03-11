@@ -1,0 +1,4 @@
+owner: rsquaredron
+repo: electronr
+provider: github
+updaterCacheDirName: electronr-updater
