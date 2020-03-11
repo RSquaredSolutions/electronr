@@ -1,4 +1,5 @@
 const builder = require('electron-builder');
+const Platform = builder.Platform;
 const path = require('path');
 
 const win32Targets = [{target: 'nsis', arch: ['x64', 'ia32']}]
@@ -13,7 +14,8 @@ let buildTargets;
 let onlyDir = false;
 const filenameFormat = 'electronr-${version}-${arch}.${ext}';
 
-process.chdir(path.resolve(__dirname, '../'));
+//process.chdir(path.resolve(__dirname, '../'));
+console.log(`CWD is: ${process.cwd()}`);
 
 if (flags.length > 2) {
 	flags = flags.slice(2)
@@ -33,8 +35,12 @@ if (buildTargets.length === 0) {
 }
 
 if (buildTargets.length === 0) {
+	console.error("NO build targets");
 	process.exit(0);
 }
+
+console.log("Starting build process");
+console.log(`Building for: ${buildTargets.map(el => el.substr(2)).join(', ')}`);
 
 const config = {
 	appId: 'xyz.rsquaredsolutions.electronr',
@@ -66,7 +72,6 @@ const config = {
 		target: (onlyDir) ? 'dir' : win32Targets,
 		artifactName: filenameFormat,
 		icon: './build/icon.png',
-		verifyCodeSignature: false,
 		extraResources: [
 			{
 				from: './build/scripts',
@@ -104,7 +109,10 @@ const config = {
 
 runBuilder().then(() => {
 	// all done
+	console.log("Build run complete");
 }).catch((err) => {
+	console.log("Build failed");
+	console.error(err);
 	process.exit(1);
 });
 
@@ -114,5 +122,6 @@ async function runBuilder() {
 		if (flag === '--mac') target = Platform.MAC.createTarget();
 		if (flag === '--win') target = Platform.WINDOWS.createTarget();
 		await builder.build({'targets': target, 'config': config});
+		console.log(`Build for ${flag.substr(2)} complete`);
 	}
 };
