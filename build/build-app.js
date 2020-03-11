@@ -38,7 +38,7 @@ if (buildTargets.length === 0) {
 
 const config = {
 	appId: 'xyz.rsquaredsolutions.electronr',
-	productName: 'ElectronR',
+	productName: 'electronr',
 	npmRebuild: false,
 	directories: {
 		output: 'dist',
