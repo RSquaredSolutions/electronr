@@ -1,4 +1,4 @@
-name: Build
+name: Build Windows Only
 
 on:
   push:
@@ -9,7 +9,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [macos-latest, windows-latest]
+        os: [windows-latest]
 
     runs-on: ${{matrix.os}}
 
@@ -41,16 +41,6 @@ jobs:
           name: electronr-${{steps.pkg.outputs.version}}.exe
           path: ./release/electronr-${{steps.pkg.outputs.version}}.exe
 
-      - name: Build macOS DMG file
-        if: matrix.os == 'macos-latest'
-        run: APPLE_ID=${{secrets.APPLE_ID}} APPLE_ID_PASS=${{secrets.APPLE_ID_PASS}} CSC_LINK=${{secrets.MACOS_CERT}} CSC_KEY_PASSWORD=${{secrets.MACOS_CERT_PASS}} npm run dist-mac
-      - name: Cache macOS release
-        if: matrix.os == 'macos-latest'
-        uses: actions/upload-artifact@v1
-        with: 
-          name: electronr-${{steps.pkg.outputs.version}}.dmg
-          path: ./release/electronr-${{steps.pkg.outputs.version}}.dmg
-
   prepare_release:
     needs: [build]
     runs-on: ubuntu-latest
@@ -70,15 +60,9 @@ jobs:
         with:
           name: electronr-${{steps.pkg.outputs.version}}.exe
           path: .
-      - name: Download macOS asset
-        uses: actions/download-artifact@v1
-        with: 
-          name: electronr-${{steps.pkg.outputs.version}}.dmg
-          path: .
       - name: Generate SHA256 checksums
         run: |
           sha256sum "electronr-${{steps.pkg.outputs.version}}.exe" > "SHA256SUMS.txt"
-          sha256sum "electronr-${{steps.pkg.outputs.version}}.dmg" > "SHA256SUMS.txt"
       - name: Verify checksums
         run: sha256sum -c SHA256SUMS.txt
       - name: Create new release draft
@@ -101,16 +85,6 @@ jobs:
           asset_path: ./electronr-${{steps.pkg.outputs.version}}.exe
           asset_name: electronr-${{steps.pkg.outputs.version}}.exe
           asset_content_type: application/x-msdownload
-
-      - name: Upload macOS asset
-        uses: actions/upload-release-asset@v1.0.1
-        env:
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
-        with:
-          upload_url: ${{steps.create_release.outputs.upload_url}}
-          asset_path: ./electronr-${{steps.pkg.outputs.version}}.dmg
-          asset_name: electronr-${{steps.pkg.outputs.version}}.dmg
-          asset_content_type: application/octet-stream
 
       - name: Upload checksums
         uses: actions/upload-release-asset@v1.0.1
