@@ -12,10 +12,9 @@
 	"scripts": {
 		"postinstall": "electron-builder install-app-deps",
 		"start": "electron .",
-		"pack": "electron-builder --dir",
-		"dist": "electron-builder --macos --windows -p always",
-		"dist-win": "electron-builder --windows",
-		"dist-mac": "electron-builder --macos"
+		"pack": "node build/build-app.js --dir",
+		"dist-win": "node build/build-app.js --win",
+		"dist-mac": "node build/build-app.js --win"
 	},
 	"dependencies": {
 		"bootstrap": "^3.3.7",
