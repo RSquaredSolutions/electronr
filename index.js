@@ -114,8 +114,12 @@ function prep_files_and_settings() {
 	//let RPath = path.join(resourcesPath, "R-Portable", "bin", "R.exe");
 	//let RToolsPath = path.join(resourcesPath, "R-Portable", "Rtools.exe");
 	//let RPackageSourcePath = path.join(resourcesPath, "packages");
-
-	let RScriptPath = "C:\\Program Files\\R\\R-3.6.2\\bin\\RScript.exe";	// TODO: static path as dictated by Docker install?
+     
+        let RScriptPath = "";
+        if(process.platform == "linux")
+           RScriptPath = "Rscript"
+        if(process.platform == "win32")   
+	  RScriptPath = "C:\\Program Files\\R\\R-3.6.2\\bin\\RScript.exe";	// TODO: static path as dictated by Docker install?
 	let RAnalysisPath = path.join(resourcesPath, "scripts");
 	
 	if (is.development) {
