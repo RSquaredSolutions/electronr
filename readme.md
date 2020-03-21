@@ -31,3 +31,43 @@ The R file executed performs the following:
 - The application ideally can execute the RScript.exe command and analysis without needing user approval (bypass UAC on Windows, execute as sudo on Mac)
 - The application and R file need to be able to read/write files to a temporary directory that can be accessed via the application
 - The application needs to be able to open and save files (using standard File Dialog boxes) to the user's file system
+
+## Docker
+
+The application has been dockerised and can be built and run within a container.  
+Assumptions: 
+  - You have a local Docker machine. To install Docker please go [here](https://docs.docker.com/install/)
+  - You have a Xserver locally which is a requirement for electron
+
+### Notes
+
+You might have to add the docker user allowed access to the Xserver
+Error:
+```
+No protocol specified
+
+(electron:15): Gtk-WARNING **: cannot open display: :0
+```
+Solution:
+Run the following command of chec how to add your local or docker user to xhost
+```
+xhost +"local:docker@"
+```
+To run docker without sudo add your local use to the docker group or follow instracutions [here](https://github.com/sindresorhus/guides/blob/master/docker-without-sudo.md)
+
+### Build Image
+
+This builds and image named electronr
+Run this command from within the root repository folder
+```
+docker build -t electronr .
+```
+
+### Run Image
+This run the image named electronr
+Run this command from within the root repository folder
+```
+docker run -it -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$DISPLAY --device /dev/snd electronr
+```
+
+

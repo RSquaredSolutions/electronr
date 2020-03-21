@@ -109,7 +109,7 @@ function run_analysis() {
 		$.each(params, function(i,v) {
 			cmd = cmd + ' "' + v + '"';
 		});
-		exec.sudo(
+		exec.execFile(
 			cmd,
 			{ name: "Subprocess" },
 			function (error, stdout, stderr) {

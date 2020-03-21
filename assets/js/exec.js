@@ -36,7 +36,7 @@ function execBat(file, parameters, error_callback, result_callback) {
 }
 
 function execFile(file, parameters, error_callback, result_callback) {
-	cp.execFile(
+	cp.exec(
 		file, 
 		parameters, 
 		function (error, stdout, stderr) {
