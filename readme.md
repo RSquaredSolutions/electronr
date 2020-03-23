@@ -66,6 +66,13 @@ docker build -t electronr .
 ### Run Image
 This run the image named electronr
 Run this command from within the root repository folder
+Mac:
+Make sure your local Xserver allowes remote connections ope IP
+Run this cmmand to checj you local ip `ifconfig en0` and replace 0.0.0.0 with your IP
+```
+docker run -it -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=0.0.0.0:0 electronr
+```
+Ubuntu:
 ```
 docker run -it -v /tmp/.X11-unix:/tmp/.X11-unix -e DISPLAY=$DISPLAY --device /dev/snd electronr
 ```
