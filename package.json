@@ -37,7 +37,7 @@
 		"tether": "^1.4.7"
 	},
 	"devDependencies": {
-		"electron": "^6.0.7",
+		"electron": "^11.5.0",
 		"electron-builder": "^21.2.0"
 	}
 }
